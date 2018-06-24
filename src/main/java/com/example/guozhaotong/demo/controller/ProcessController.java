@@ -5,19 +5,25 @@ import com.example.guozhaotong.demo.repository.PersonRepository;
 import com.example.guozhaotong.demo.utils.Utils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import redis.clients.jedis.Jedis;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.util.*;
 
 @RestController
 public class ProcessController {
 
+    @Value("${tongtong.redis.host}")
+    String redisHost;
+
     private final Logger logger = Logger.getLogger(this.getClass());
 
-    private Jedis jedis = new Jedis("redis");
+    private Jedis jedis;
 
     @Autowired
     PersonRepository personRepository;
@@ -162,5 +168,19 @@ public class ProcessController {
             }
         }, time);
         return res;
+    }
+
+
+    /***
+     *会在构造函数之后、init之前执行。
+     */
+    @PostConstruct
+    private void setLoginBody() {
+       this.jedis = new Jedis(redisHost);
+    }
+
+    @PreDestroy
+    private void destroyJedis(){
+        this.jedis.close();
     }
 }
