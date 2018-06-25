@@ -27,10 +27,12 @@ import java.util.*;
 public class EtlController {
 
     @Value("${tongtong.redis.host}")//需写代码来加载
-    String redisHost;
+            String redisHost;
+
+    @Value("${tongtong.etl.port}")
+    String etlPort;
 
     private final Logger logger = Logger.getLogger(this.getClass());
-
     private Jedis jedis;
     private Utils utils = new Utils();
     private HashMap<Long, Timer> timerHashMap = new HashMap<>();
@@ -42,6 +44,7 @@ public class EtlController {
 
     /**
      * This is a test api
+     *
      * @return
      */
     @GetMapping("/hi")
@@ -116,11 +119,11 @@ public class EtlController {
         //http调用
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("http://127.0.0.1:8080/list")
+                .url("http://" + utils.getIp() + ":" + etlPort + "/listPerson")
                 .build();
         try {
             Response response = client.newCall(request).execute();
-            if(response.body() == null){
+            if (response.body() == null) {
                 return null;
             }
             Person[] persons = (Person[]) utils.fromStr2Obj(response.body().string(), Person[].class);
@@ -129,7 +132,7 @@ public class EtlController {
             e.printStackTrace();
         }
         utils.sort(personList, "English");
-        logger.info("按照英语成绩排序");
+        logger.info("按照英语成绩排序——人员列表通过http调用实现");
         return personList;
     }
 
@@ -180,7 +183,7 @@ public class EtlController {
     @PostMapping("/deleteTimeTask")
     public String deleteTimeTask(long timeTaskId) {
         Timer timer = timerHashMap.get(timeTaskId);
-        if(timer == null){
+        if (timer == null) {
             String res = "该任务不存在。";
             logger.error("尝试取消任务" + timeTaskId + "，但" + res);
             return res;
@@ -202,28 +205,31 @@ public class EtlController {
     }
 
     @GetMapping("/listAllTimedTask")
-    public List<TimedTask> listAllTimedTask (){
+    public List<TimedTask> listAllTimedTask() {
         List<TimedTask> timedTaskList = timedTaskRepository.findAll();
+        logger.info("列出所有定时任务列表");
         return timedTaskList;
     }
 
     @GetMapping("/listWaitingTimedTask")
-    public List<TimedTask> listWaitingTimedTask (){
+    public List<TimedTask> listWaitingTimedTask() {
         List<TimedTask> timedTaskList = new ArrayList<>();
-        for(long timerId : timerHashMap.keySet()){
+        for (long timerId : timerHashMap.keySet()) {
             timedTaskList.add(timedTaskRepository.findById(timerId).get());
         }
+        logger.info("列出等待执行的定时任务列表");
         return timedTaskList;
     }
 
     @GetMapping("/listInterruptedTimedTask")
-    public List<TimedTask> listInterruptedTimedTask (){
+    public List<TimedTask> listInterruptedTimedTask() {
         List<TimedTask> timedTaskList = timedTaskRepository.findByStatus(0);
+        logger.info("列出被中断的定时任务列表");
         return timedTaskList;
     }
 
     /**
-     *会在构造函数之后、init之前执行。
+     * 会在构造函数之后、init之前执行。
      */
     @PostConstruct
     private void setLoginBody() {

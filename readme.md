@@ -14,13 +14,15 @@
 ### http调用
 - 使用okhttp进行http调用
 - 功能按照英语成绩排序，在调用人员列表时，通过listPerson的url进行http调用
+- 在docker中对部署在本机上的服务进行http调用的时候，要用本工程的端口，而不是映射到宿主机上的端口
 
 ### redis缓存
-- 从数据库中读取成绩列表后，存在redis中。过期时间设置为10秒
+- 从数据库中读取成绩列表后，存在redis中。过期时间设置为10秒。
 - 下次调用列表时先检查redis中是否存在
+- 当对数据库进行增删改操作后要删除对应的redis缓存
 
 ### docker
-- 写docker file
+- 写Dockerfile，进行必要配置。注意docker中时间可能不对（时区问题），可以直接从配置文件中配置为跟宿主机一样的时间，或配置时区
 - docker内容器之间没法相互通过网络进行调用（原因：容器相互独立， ip不是localhost了，所以需要用link进行域名映射）
     - 使用了不同的配置文件，部署在docker里一套文件，本地dev一套文件，因为域名不一样。
 - redis的重启策略：除非人工关闭，否则自动重启
@@ -30,7 +32,7 @@
 docker run --name some-redis -d -p 6379:6379 --restart=unless-stopped redis:3.2 
 ./mvnw package
 docker build -t hi .
-docker run -p 8081:8080 --link some-redis:redis  hi
+docker run --name etltest -p 8081:8080 --link some-redis:redis  hi
 ```
 
 

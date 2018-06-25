@@ -3,6 +3,8 @@ package com.example.guozhaotong.demo.utils;
 import com.example.guozhaotong.demo.entity.Person;
 import com.google.gson.Gson;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.*;
 
 public class Utils {
@@ -55,5 +57,16 @@ public class Utils {
         });
 //        return personList;
         return;
+    }
+
+    public String getIp(){
+        String ip = "";
+        try {
+            InetAddress addr = InetAddress.getLocalHost();
+            ip = addr.getHostAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return ip;
     }
 }
