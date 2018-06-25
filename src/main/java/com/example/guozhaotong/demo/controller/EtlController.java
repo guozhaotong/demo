@@ -183,12 +183,15 @@ public class EtlController {
     @PostMapping("/deleteTimeTask")
     public String deleteTimeTask(long timeTaskId) {
         Timer timer = timerHashMap.get(timeTaskId);
-        if (timer == null) {
+        TimedTask timedTask = null;
+        try {
+            timedTask = timedTaskRepository.findById(timeTaskId).get();
+        }
+        catch (Exception e){
             String res = "该任务不存在。";
             logger.error("尝试取消任务" + timeTaskId + "，但" + res);
             return res;
         }
-        TimedTask timedTask = timedTaskRepository.findById(timeTaskId).get();
         Date dateOfTask = (Date) utils.fromStr2Obj(timedTask.getExecuteTime(), Date.class);
         if (dateOfTask.compareTo(new Date()) < 0) {
             String res = "目前该任务已完成，无法取消执行任务。";
