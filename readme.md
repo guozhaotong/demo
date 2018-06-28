@@ -1,5 +1,5 @@
 ### 日志记录
-- 使用log4j进行日志记录
+- 使用logback进行日志记录
 - 控制台输出 + 写日志文件
 
 ### 数据库
@@ -7,7 +7,7 @@
 - 注意：当Entity字段改变时，数据库不会相应改变表中字段，需要人工drop表。
 
 ### 定时任务
-- 使用timer实现  quartz(以后可以用更专业的)   springboot自带的schedule只支持编码设定时间
+- 使用线程池的ScheduledExecutorService进行定时任务的实现， ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
 - 实现了定时任务的设置和删除（考虑任务不存在、任务已经执行完成等异常情况）
 - 注意：月份从0开始计数。其他参数都是跟生活中一样的正常计数
 
@@ -15,12 +15,13 @@
 - 使用okhttp进行http调用
 - 功能按照英语成绩排序，在调用人员列表时，通过listPerson的url进行http调用
 - 在docker中对部署在本机上的服务进行http调用的时候，要用本工程的端口，而不是映射到宿主机上的端口
+- 简单封装httpGet和httpPost（Utils）
 
 ### 缓存
-- 由Redis改成了Ehcache
-- 从数据库中读取成绩列表后，存在redis中。过期时间设置为10秒。
-- 下次调用列表时先检查redis中是否存在
-- 当对数据库进行增删改操作后要删除对应的redis缓存
+- 由Redis改成了Ehcache。
+- 从数据库中读取成绩列表后，存在缓存中。有过期时间的设置。
+- 下次调用列表时先检查缓存中是否存在
+- 当对数据库进行增删改操作后要删除对应的缓存
 
 ### docker
 - 写Dockerfile，进行必要配置。注意docker中时间可能不对（时区问题），可以直接从配置文件中配置为跟宿主机一样的时间，或配置时区
@@ -33,6 +34,13 @@
 - 首先自定义枚举状态码和状态描述
 - Responce类中包括状态码、状态描述和真正函数返回的body
 
+### 单元测试
+- springboot自带测试。在执行./mvn package进行项目打包时，会在编译好后自动运行测试，测试通过再打包。
+- Junit4进行单元测试
+
+### 序列化工具：fastJson
+
+### docker常用命令
 ```
 docker run --name some-redis -d -p 6379:6379 --restart=unless-stopped redis:3.2 
 ./mvnw package
