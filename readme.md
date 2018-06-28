@@ -16,7 +16,8 @@
 - 功能按照英语成绩排序，在调用人员列表时，通过listPerson的url进行http调用
 - 在docker中对部署在本机上的服务进行http调用的时候，要用本工程的端口，而不是映射到宿主机上的端口
 
-### redis缓存
+### 缓存
+- 由Redis改成了Ehcache
 - 从数据库中读取成绩列表后，存在redis中。过期时间设置为10秒。
 - 下次调用列表时先检查redis中是否存在
 - 当对数据库进行增删改操作后要删除对应的redis缓存
@@ -28,11 +29,16 @@
 - redis的重启策略：除非人工关闭，否则自动重启
 - docker logs 前台打印log，通过这个查找问题
 
+### 返回的Responce类
+- 首先自定义枚举状态码和状态描述
+- Responce类中包括状态码、状态描述和真正函数返回的body
+
 ```
 docker run --name some-redis -d -p 6379:6379 --restart=unless-stopped redis:3.2 
 ./mvnw package
 docker build -t hi .
-docker run --name etltest -p 8081:8080 --link some-redis:redis  hi
+docker run --name etltest -p 8081:8080 --link some-redis:redis  hi // 现在不用redis了，就不用link了用下面语句
+docker run --name etltest -p 8081:8080 hi 
 ```
 
 
