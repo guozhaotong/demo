@@ -38,7 +38,9 @@
 - springboot自带测试。在执行./mvn package进行项目打包时，会在编译好后自动运行测试，测试通过再打包。
 - Junit4进行单元测试
 
-### 序列化工具：fastJson
+### 序列化工具
+- fastjson
+- (jackson)
 
 ### docker常用命令
 ```

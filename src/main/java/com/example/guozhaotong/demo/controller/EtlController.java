@@ -29,50 +29,42 @@ public class EtlController {
      */
     @PostMapping("/hi")
     public ResponseEntity hello() {
-        return new ResponseEntity(ReturnStatus.OPERATION_SUCCESS.getStatusCode(), ReturnStatus.OPERATION_SUCCESS.getStatusMsg(),
-                etlService.hello());
+        return new ResponseEntity(ReturnStatus.OPERATION_SUCCESS, etlService.hello());
     }
 
     @GetMapping("/listPerson")
     public ResponseEntity listPerson() {
-        return new ResponseEntity(ReturnStatus.OPERATION_SUCCESS.getStatusCode(), ReturnStatus.OPERATION_SUCCESS.getStatusMsg(),
-                etlService.listPerson());
+        return new ResponseEntity(ReturnStatus.OPERATION_SUCCESS, etlService.listPerson());
     }
 
     @PostMapping("/addrecord")
     public ResponseEntity addRecord(String name, double chinese, double math, double english) {
-        return new ResponseEntity(ReturnStatus.ADD_DATA_SUCCESS.getStatusCode(), ReturnStatus.ADD_DATA_SUCCESS.getStatusMsg(),
-                etlService.addRecord(name, chinese, math, english));
+        return new ResponseEntity(ReturnStatus.ADD_DATA_SUCCESS, etlService.addRecord(name, chinese, math, english));
     }
 
     @GetMapping("/sortedbychinesedevidebypage")
     public ResponseEntity sortedByChinese(int page, int size) {
-        return new ResponseEntity(ReturnStatus.OPERATION_SUCCESS.getStatusCode(), ReturnStatus.OPERATION_SUCCESS.getStatusMsg(),
-                etlService.sortedByChinese(page, size));
+        return new ResponseEntity(ReturnStatus.OPERATION_SUCCESS, etlService.sortedByChinese(page, size));
     }
 
     @GetMapping("/sortedbychinese")
     public ResponseEntity sortedByChinese() {
-        return new ResponseEntity(ReturnStatus.OPERATION_SUCCESS.getStatusCode(), ReturnStatus.OPERATION_SUCCESS.getStatusMsg(),
-                etlService.sortedByChinese());
+        return new ResponseEntity(ReturnStatus.OPERATION_SUCCESS, etlService.sortedByChinese());
     }
 
     @Generated("/sortedbymath")
     public ResponseEntity sortedByMath() {
-        return new ResponseEntity(ReturnStatus.OPERATION_SUCCESS.getStatusCode(), ReturnStatus.OPERATION_SUCCESS.getStatusMsg(),
-                etlService.sortedByMath());
+        return new ResponseEntity(ReturnStatus.OPERATION_SUCCESS, etlService.sortedByMath());
     }
 
     @GetMapping("/sortedbyenglish")
     public ResponseEntity sortedByEnglish() {
-        return new ResponseEntity(ReturnStatus.OPERATION_SUCCESS.getStatusCode(), ReturnStatus.OPERATION_SUCCESS.getStatusMsg(),
-                etlService.sortedByEnglish());
+        return new ResponseEntity(ReturnStatus.OPERATION_SUCCESS, etlService.sortedByEnglish());
     }
 
     @PostMapping("/timedtask")
     public ResponseEntity timedTask(int year, int month, int day, int hour, int minute, int second, String taskName) {
-        return new ResponseEntity(ReturnStatus.ADD_DATA_SUCCESS.getStatusCode(), ReturnStatus.ADD_DATA_SUCCESS.getStatusMsg(),
-                etlService.timedTask(year, month, day, hour, minute, second, taskName));
+        return new ResponseEntity(ReturnStatus.ADD_DATA_SUCCESS, etlService.timedTask(year, month, day, hour, minute, second, taskName));
     }
 
     @PostMapping("/deleteTimeTask")
@@ -81,26 +73,23 @@ public class EtlController {
         switch (res){
             case "该任务不存在。":
             case "目前该任务已完成，无法取消执行任务。":
-                return new ResponseEntity(ReturnStatus.DELETE_DATA_ERROR.getStatusCode(), ReturnStatus.DELETE_DATA_ERROR.getStatusMsg(), res);
-            default: return new ResponseEntity(ReturnStatus.OPERATION_SUCCESS.getStatusCode(), ReturnStatus.OPERATION_SUCCESS.getStatusMsg(), res);
+                return new ResponseEntity(ReturnStatus.DELETE_DATA_ERROR, res);
+            default: return new ResponseEntity(ReturnStatus.OPERATION_SUCCESS, res);
         }
     }
 
     @GetMapping("/listAllTimedTask")
     public ResponseEntity listAllTimedTask() {
-        return new ResponseEntity(ReturnStatus.OPERATION_SUCCESS.getStatusCode(), ReturnStatus.OPERATION_SUCCESS.getStatusMsg(),
-                etlService.listAllTimedTask());
+        return new ResponseEntity(ReturnStatus.OPERATION_SUCCESS, etlService.listAllTimedTask());
     }
 
     @GetMapping("/listWaitingTimedTask")
     public ResponseEntity listWaitingTimedTask() {
-        return new ResponseEntity(ReturnStatus.OPERATION_SUCCESS.getStatusCode(), ReturnStatus.OPERATION_SUCCESS.getStatusMsg(),
-                etlService.listWaitingTimedTask());
+        return new ResponseEntity(ReturnStatus.OPERATION_SUCCESS, etlService.listWaitingTimedTask());
     }
 
     @GetMapping("/listInterruptedTimedTask")
     public ResponseEntity listInterruptedTimedTask() {
-        return new ResponseEntity(ReturnStatus.OPERATION_SUCCESS.getStatusCode(), ReturnStatus.OPERATION_SUCCESS.getStatusMsg(),
-                etlService.listInterruptedTimedTask());
+        return new ResponseEntity(ReturnStatus.OPERATION_SUCCESS, etlService.listInterruptedTimedTask());
     }
 }

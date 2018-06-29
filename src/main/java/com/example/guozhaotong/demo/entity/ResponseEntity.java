@@ -1,33 +1,23 @@
 package com.example.guozhaotong.demo.entity;
 
 public class ResponseEntity {
-    private int code;
-    private String responseMsg;
+    private ReturnStatus returnStatus;
     private Object body;
-
-    public ResponseEntity(int code, String responseMsg, Object body) {
-        this.code = code;
-        this.responseMsg = responseMsg;
-        this.body = body;
-    }
 
     public ResponseEntity() {
     }
 
-    public int getCode() {
-        return code;
+    public ResponseEntity(ReturnStatus returnStatus, Object body) {
+        this.returnStatus = returnStatus;
+        this.body = body;
     }
 
-    public void setCode(int code) {
-        this.code = code;
+    public ReturnStatus getReturnStatus() {
+        return returnStatus;
     }
 
-    public String getResponseMsg() {
-        return responseMsg;
-    }
-
-    public void setResponseMsg(String responseMsg) {
-        this.responseMsg = responseMsg;
+    public void setReturnStatus(ReturnStatus returnStatus) {
+        this.returnStatus = returnStatus;
     }
 
     public Object getBody() {
@@ -36,14 +26,5 @@ public class ResponseEntity {
 
     public void setBody(Object body) {
         this.body = body;
-    }
-
-    @Override
-    public String toString() {
-        return "ResponseEntity{" +
-                "code=" + code +
-                ", responseMsg='" + responseMsg + '\'' +
-                ", body=" + body +
-                '}';
     }
 }
